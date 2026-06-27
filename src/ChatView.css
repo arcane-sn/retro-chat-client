@@ -1,0 +1,359 @@
+/* Chat Bentar — chat view.
+   Ported from the Claude Design source "Retro Chat.dc.html", Frame B
+   (Pixel Messenger). Inline styles lifted into named classes; visuals 1:1. */
+
+.cv {
+  --ink: #17181a;
+  --paper: #e7e8e3;
+  --bg: #cdcec6;
+  --muted: #5a5c54;
+  --dim: #6a6c64;
+  --name: #8a8c84;
+  --placeholder: #9a9c92;
+
+  /* Readable-but-retro font for actual reading text (messages, input).
+     Pixel fonts stay on small chrome accents only. */
+  --readable: 'Space Mono', 'Courier New', monospace;
+
+  --px-corner: polygon(
+    0 4px, 2px 4px, 2px 2px, 4px 2px, 4px 0,
+    calc(100% - 4px) 0, calc(100% - 4px) 2px, calc(100% - 2px) 2px, calc(100% - 2px) 4px, 100% 4px,
+    100% calc(100% - 4px), calc(100% - 2px) calc(100% - 4px), calc(100% - 2px) calc(100% - 2px),
+    calc(100% - 4px) calc(100% - 2px), calc(100% - 4px) 100%,
+    4px 100%, 4px calc(100% - 2px), 2px calc(100% - 2px), 2px calc(100% - 4px), 0 calc(100% - 4px)
+  );
+
+  min-height: 100vh;
+  background: var(--bg);
+  background-image: radial-gradient(rgba(23, 24, 26, 0.1) 1px, transparent 0);
+  background-size: 6px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px;
+  font-family: 'Pixelify Sans', sans-serif;
+}
+
+.cv__bezel {
+  background: var(--ink);
+  padding: 7px;
+  clip-path: var(--px-corner);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.2);
+}
+
+.cv__screen {
+  width: 370px;
+  height: 800px;
+  max-width: 100%;
+  max-height: calc(100vh - 56px);
+  background: var(--paper);
+  clip-path: var(--px-corner);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* header */
+.cv__header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 15px;
+  border-bottom: 3px solid var(--ink);
+}
+.cv__back {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 13px;
+  color: var(--ink);
+  padding: 0;
+  line-height: 1;
+}
+.cv__title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: var(--ink);
+  letter-spacing: 1px;
+}
+.cv__status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--dim);
+  letter-spacing: 0.5px;
+}
+.cv__status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--ink);
+  display: inline-block;
+  animation: cv-blink 1.4s steps(1) infinite;
+}
+.cv__status-dot--off {
+  background: var(--placeholder);
+  animation: none;
+}
+
+/* copy-room button (top-right of header) */
+.cv__copy {
+  margin-left: auto;
+  position: relative;
+  z-index: 70;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border: none;
+  cursor: pointer;
+  background: var(--paper);
+  color: var(--ink);
+  clip-path: var(--px-corner);
+  box-shadow: inset 0 0 0 2px var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cv__copy:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.cv__copy:active {
+  transform: translate(1px, 1px);
+}
+.cv__copy-icon {
+  width: 18px;
+  height: 18px;
+  shape-rendering: crispEdges;
+}
+
+.cv__tooltip {
+  position: absolute;
+  top: calc(100% + 7px);
+  right: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  padding: 6px 8px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.08s;
+}
+.cv__copy:hover .cv__tooltip,
+.cv__copy:focus-visible .cv__tooltip,
+.cv__tooltip--show {
+  opacity: 1;
+}
+
+/* messages */
+.cv__messages {
+  flex: 1;
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  overflow-y: auto;
+}
+.cv__daymark {
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: #a4a69c;
+  letter-spacing: 1px;
+}
+
+.cv__row {
+  display: flex;
+  gap: 9px;
+  align-items: flex-end;
+}
+.cv__row--mine {
+  flex-direction: row-reverse;
+}
+
+.cv__avatar {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  clip-path: var(--px-corner);
+}
+.cv__avatar--peer {
+  background: var(--ink);
+  color: var(--paper);
+}
+.cv__avatar--mine {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.cv__avatar--blank {
+  visibility: hidden;
+}
+
+.cv__col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.cv__col--mine {
+  align-items: flex-end;
+}
+.cv__name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--name);
+  margin: 0 0 6px 4px;
+  letter-spacing: 0.5px;
+}
+
+.cv__bubble {
+  display: inline-block;
+  clip-path: var(--px-corner);
+  padding: 11px 14px;
+  font-family: var(--readable);
+  font-size: 14px;
+  line-height: 1.55;
+  letter-spacing: 0.2px;
+  max-width: 240px;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.cv__bubble--peer {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.cv__bubble--mine {
+  background: var(--ink);
+  color: var(--paper);
+}
+.cv__bubble--sending {
+  opacity: 0.55;
+}
+
+/* composer */
+.cv__composer {
+  flex: none;
+  padding: 13px 15px;
+  border-top: 3px solid var(--ink);
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+.cv__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: var(--paper);
+  clip-path: var(--px-corner);
+  box-shadow: inset 0 0 0 2px var(--ink);
+  padding: 11px 13px;
+  font-family: var(--readable);
+  font-size: 14px;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.cv__input::placeholder {
+  color: var(--placeholder);
+}
+.cv__send {
+  flex: none;
+  width: 46px;
+  height: 44px;
+  border: none;
+  cursor: pointer;
+  background: var(--ink);
+  color: var(--paper);
+  clip-path: var(--px-corner);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+.cv__send:active {
+  transform: translate(1px, 1px);
+}
+.cv__send:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* full-screen states (connecting / room full / error) */
+.cv__notice {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 14px;
+  padding: 24px;
+}
+.cv__notice-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: var(--ink);
+  line-height: 1.6;
+}
+.cv__notice-text {
+  font-family: var(--readable);
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 260px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.cv__notice-btn {
+  margin-top: 6px;
+  border: none;
+  cursor: pointer;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 13px 16px;
+}
+.cv__notice-btn:active {
+  transform: translate(1px, 1px);
+}
+
+/* scanlines */
+.cv__scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.07) 0px,
+    rgba(0, 0, 0, 0.07) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+@keyframes cv-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}

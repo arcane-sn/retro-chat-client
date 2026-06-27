@@ -1,0 +1,325 @@
+/* Chat Bentar — landing.
+   Ported from the Claude Design source "Chat Bentar Landing.dc.html".
+   Inline styles from the design are lifted into named classes here so the
+   JSX stays readable. Visuals (colors, sizes, pixel clip-paths) are 1:1. */
+
+.cb {
+  --ink: #17181a;
+  --paper: #e7e8e3;
+  --bg: #cdcec6;
+  --muted: #5a5c54;
+  --dim: #7a7c74;
+  --faint: #a4a69c;
+  --line: #9a9c92;
+  --cheek: #3a3b3e;
+
+  /* Reused pixel-notched corner. */
+  --px-corner: polygon(
+    0 4px, 2px 4px, 2px 2px, 4px 2px, 4px 0,
+    calc(100% - 4px) 0, calc(100% - 4px) 2px, calc(100% - 2px) 2px, calc(100% - 2px) 4px, 100% 4px,
+    100% calc(100% - 4px), calc(100% - 2px) calc(100% - 4px), calc(100% - 2px) calc(100% - 2px),
+    calc(100% - 4px) calc(100% - 2px), calc(100% - 4px) 100%,
+    4px 100%, 4px calc(100% - 2px), 2px calc(100% - 2px), 2px calc(100% - 4px), 0 calc(100% - 4px)
+  );
+
+  min-height: 100vh;
+  background: var(--bg);
+  background-image: radial-gradient(rgba(23, 24, 26, 0.1) 1px, transparent 0);
+  background-size: 6px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px;
+  font-family: 'Pixelify Sans', sans-serif;
+}
+
+.cb__shadow {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+}
+
+.cb__bezel {
+  background: var(--ink);
+  padding: 7px;
+  clip-path: var(--px-corner);
+}
+
+.cb__screen {
+  width: 390px;
+  height: 812px;
+  max-width: 100%;
+  background: var(--paper);
+  clip-path: var(--px-corner);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* status bar */
+.cb__statusbar {
+  flex: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 16px 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--dim);
+  letter-spacing: 1px;
+}
+
+/* hero */
+.cb__hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 26px 0;
+}
+
+/* ghost mascot */
+.cb__mascot {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.cb__bubble {
+  position: absolute;
+  top: -8px;
+  left: 104px;
+  z-index: 3;
+}
+
+.cb__bubble-body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 7px 11px 8px;
+  clip-path: var(--px-corner);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+.cb__bubble-tail {
+  width: 9px;
+  height: 9px;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 2px var(--ink);
+  margin: -3px 0 0 12px;
+}
+
+.cb__ghost {
+  animation: cb-bob 2.4s steps(4) infinite alternate;
+}
+
+.cb__ghost-body {
+  position: relative;
+  width: 120px;
+  height: 100px;
+  background: var(--ink);
+  clip-path: polygon(
+    0 12px, 6px 12px, 6px 6px, 12px 6px, 12px 0,
+    108px 0, 108px 6px, 114px 6px, 114px 12px, 120px 12px, 120px 100px, 0 100px
+  );
+}
+
+.cb__eye {
+  position: absolute;
+  top: 38px;
+  width: 18px;
+  height: 18px;
+  background: var(--paper);
+}
+.cb__eye--left { left: 24px; }
+.cb__eye--right { left: 78px; }
+.cb__pupil {
+  position: absolute;
+  left: 5px;
+  bottom: 3px;
+  width: 8px;
+  height: 8px;
+  background: var(--ink);
+}
+
+.cb__cheek {
+  position: absolute;
+  top: 62px;
+  width: 10px;
+  height: 6px;
+  background: var(--cheek);
+}
+.cb__cheek--left { left: 14px; }
+.cb__cheek--right { left: 96px; }
+
+.cb__skirt {
+  width: 120px;
+  display: flex;
+  gap: 9px;
+  height: 18px;
+}
+.cb__skirt span {
+  flex: 1;
+  background: var(--ink);
+}
+
+/* wordmark */
+.cb__wordmark {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 38px;
+  color: var(--ink);
+  line-height: 1.16;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+/* .com tag */
+.cb__com {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cb__com-rule {
+  height: 2px;
+  width: 26px;
+  background: var(--line);
+}
+.cb__com-badge {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 6px 9px;
+  clip-path: var(--px-corner);
+}
+
+/* tagline */
+.cb__tagline {
+  margin-top: 22px;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 18px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.45;
+  max-width: 300px;
+}
+
+/* online chip */
+.cb__online {
+  margin-top: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--paper);
+  padding: 8px 13px;
+  clip-path: var(--px-corner);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.cb__dot {
+  width: 8px;
+  height: 8px;
+  background: var(--ink);
+  display: inline-block;
+  animation: cb-blink 1.4s steps(1) infinite;
+}
+.cb__online-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--ink);
+  letter-spacing: 1px;
+}
+
+/* bottom CTA */
+.cb__cta {
+  flex: none;
+  padding: 0 26px 26px;
+}
+.cb__cta-shadow {
+  filter: drop-shadow(4px 4px 0 rgba(23, 24, 26, 0.26));
+}
+.cb__start {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  letter-spacing: 2px;
+  padding: 21px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  clip-path: var(--px-corner);
+  box-shadow:
+    inset 0 0 0 2px var(--paper),
+    inset 0 0 0 4px var(--ink),
+    inset 0 0 0 6px var(--paper);
+}
+.cb__start:active {
+  transform: translate(2px, 2px);
+}
+.cb__start-arrow {
+  font-size: 11px;
+}
+.cb__caret {
+  display: inline-block;
+  width: 9px;
+  height: 15px;
+  background: var(--paper);
+  animation: cb-blink 1.06s steps(1) infinite;
+}
+
+/* reassurance */
+.cb__reassure {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--dim);
+  letter-spacing: 1px;
+}
+.cb__reassure-sep {
+  color: #b4b6ac;
+}
+
+/* footer */
+.cb__footer {
+  margin-top: 13px;
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--faint);
+  letter-spacing: 1px;
+}
+
+/* scanlines */
+.cb__scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.07) 0px,
+    rgba(0, 0, 0, 0.07) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+@keyframes cb-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes cb-bob {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
