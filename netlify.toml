@@ -1,0 +1,12 @@
+# Netlify build config. Without this, Netlify may publish the repo root (raw
+# source) instead of the Vite build output — which makes the browser try to
+# load /src/main.tsx and fail the JS MIME-type check.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# SPA fallback: serve the built index.html for any path (routing is client-side).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
